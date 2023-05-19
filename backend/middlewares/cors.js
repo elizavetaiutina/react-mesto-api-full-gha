@@ -1,13 +1,4 @@
-const allowedCors = [
-  'https://lizaiutina.nomoredomains.monster',
-  'http://lizaiutina.nomoredomains.monster',
-  'https://api.lizaiutina.nomoredomains.monster',
-  'http://api.lizaiutina.nomoredomains.monster',
-  'localhost:3000',
-  'http://localhost:3000',
-  'localhost:3001',
-  'http://localhost:3001',
-];
+const { allowedCors } = require('../utils/constants');
 
 // eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
