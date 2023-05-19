@@ -76,7 +76,7 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: "http://lizaiutina.nomoredomains.monster",
+  baseUrl: "http://api.lizaiutina.nomoredomains.monster",
   headers: {
     authorization: token,
     "Content-Type": "application/json",
