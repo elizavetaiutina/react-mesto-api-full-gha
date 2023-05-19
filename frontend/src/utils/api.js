@@ -76,7 +76,7 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: "http://api.lizaiutina.nomoredomains.monster",
+  baseUrl: "http://localhost:3000",
   headers: {
     authorization: `Bearer ${localStorage.getItem("token")}`,
     "Content-Type": "application/json",
