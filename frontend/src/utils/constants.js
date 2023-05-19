@@ -8,7 +8,4 @@ const objectValidation = {
   errorClass: "form__span-error_active",
 };
 
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDY3MjhiNDlhZWYwOTQ0M2VlZjNjZDciLCJpYXQiOjE2ODQ0ODc3ODgsImV4cCI6MTY4NTA5MjU4OH0.go157xxi0znQFsIHi_UKafUVh8BMCdEVh20IJOuDyvM";
-
-export { objectValidation, token };
+export { objectValidation };

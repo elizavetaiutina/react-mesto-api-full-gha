@@ -22,17 +22,6 @@ function App() {
   const [arrayCards, setArrayCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then(([user, array]) => {
-        setCurrentUser(user);
-        setArrayCards(array);
-      })
-      .catch((err) => {
-        console.log(`Ошибка: ${err}.`);
-      });
-  }, []);
-
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
@@ -65,6 +54,7 @@ function App() {
     api
       .editUserInfo(data)
       .then((data) => {
+        console.log("data", data);
         setCurrentUser(data);
         closeAllPopups();
       })
@@ -254,6 +244,18 @@ function App() {
     setLoggedIn(false);
     navigate("/signin", { replace: true });
   };
+
+  useEffect(() => {
+    loggedIn &&
+      Promise.all([api.getUserInfo(), api.getInitialCards()])
+        .then(([user, array]) => {
+          setCurrentUser(user);
+          setArrayCards(array);
+        })
+        .catch((err) => {
+          console.log(`Ошибка: ${err}.`);
+        });
+  }, [loggedIn]);
 
   return (
     <div className="App">

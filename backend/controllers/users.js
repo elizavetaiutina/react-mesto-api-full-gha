@@ -28,6 +28,7 @@ const login = (req, res, next) => {
             expiresIn: '7d',
           }
         ); // создадим токен
+        console.log(token);
         return res.status(200).send({ token }); // вернём токен
       });
     })
@@ -61,6 +62,7 @@ const getUser = (req, res, next) => {
 
 // ВОЗВРАЩАЕТ ИНФОРМАЦИЮ О ТЕКУЩЕМ ПОЛЬЗОВАТЕЛЕ
 const getInfoUser = (req, res, next) => {
+  console.log(req);
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {

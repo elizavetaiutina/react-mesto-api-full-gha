@@ -1,5 +1,3 @@
-import { token } from "./constants.js";
-
 class Api {
   constructor({ baseUrl, headers }) {
     this._url = baseUrl;
@@ -7,6 +5,7 @@ class Api {
   }
 
   _checkResponse(result) {
+    console.log("result", result);
     if (result.ok) {
       return result.json();
     }
