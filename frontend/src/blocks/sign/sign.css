@@ -1,0 +1,42 @@
+.sign {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sign__title {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
+  text-align: center;
+  color: #ffffff;
+
+  margin: 0 0 50px;
+  padding: 0;
+}
+
+.sign__text {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #ffffff;
+
+  margin: 15px 0 0;
+  padding: 0;
+}
+
+.sign__link {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.sign__link:hover {
+  text-decoration: underline;
+}

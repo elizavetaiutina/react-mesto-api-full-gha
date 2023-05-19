@@ -1,14 +1,15 @@
 const allowedCors = [
   'https://lizaiutina.nomoredomains.monster',
-  'http://lizaiutina.nomoredomains.monster',
+  'http://lizaiutina.nomoredomains.monster/',
   'https://api.lizaiutina.nomoredomains.monster',
-  'http://api.lizaiutina.nomoredomains.monster',
+  'http://api.lizaiutina.nomoredomains.monster/',
   'localhost:3000',
   'https://localhost:3000',
   'http://localhost:3000',
   'localhost:3001',
 ];
 
+// eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
   const { origin } = req.headers; // Сохраняем источник запроса в переменную origin
 
@@ -21,7 +22,7 @@ module.exports = (req, res, next) => {
   // проверяем, что источник запроса есть среди разрешённых
   if (allowedCors.includes(origin)) {
     // устанавливаем заголовок, который разрешает браузеру запросы с этого источника
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', origin);
   }
 
   // Если это предварительный запрос, добавляем нужные заголовки
@@ -34,5 +35,5 @@ module.exports = (req, res, next) => {
     return res.end();
   }
 
-  return next();
+  next();
 };
