@@ -1,8 +1,8 @@
 const allowedCors = [
   'https://lizaiutina.nomoredomains.monster',
-  'http://lizaiutina.nomoredomains.monster/',
+  'http://lizaiutina.nomoredomains.monster',
   'https://api.lizaiutina.nomoredomains.monster',
-  'http://api.lizaiutina.nomoredomains.monster/',
+  'http://api.lizaiutina.nomoredomains.monster',
   'localhost:3000',
   'https://localhost:3000',
   'http://localhost:3000',
