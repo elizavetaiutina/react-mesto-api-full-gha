@@ -6,6 +6,7 @@ const ErrorBadRequest = require('../utils/errors/ErrorBadRequest');
 const ErrorNotFound = require('../utils/errors/ErrorNotFound');
 const ErrorConflict = require('../utils/errors/ErrorConflict');
 const ErrorUnauthorized = require('../utils/errors/ErrorUnauthorized');
+const { NODE_ENV, JWT_SECRET } = require('../utils/constants');
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
@@ -20,9 +21,13 @@ const login = (req, res, next) => {
         if (!matched) {
           throw new ErrorUnauthorized('Неправильные email или пароль');
         }
-        const token = jwt.sign({ _id: user._id }, 'secret-key', {
-          expiresIn: '7d',
-        }); // создадим токен
+        const token = jwt.sign(
+          { _id: user._id },
+          NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+          {
+            expiresIn: '7d',
+          }
+        ); // создадим токен
         return res.status(200).send({ token }); // вернём токен
       });
     })

@@ -188,11 +188,11 @@ function App() {
   }, [loggedIn]);
 
   const tokenCheck = () => {
-    const jwt = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-    if (jwt) {
+    if (token) {
       auth
-        .getContent(jwt)
+        .getContent(token)
         .then((res) => {
           console.log("res", res);
           setLoggedIn(true);

@@ -5,6 +5,7 @@ const { errors } = require('celebrate');
 const router = require('./routes');
 
 const ErrorNotFound = require('./utils/errors/ErrorNotFound');
+const { PORT } = require('./utils/constants');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const handlerError = require('./middlewares/handlerError');
@@ -14,8 +15,6 @@ const {
 } = require('./middlewares/validation');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('./middlewares/cors');
-
-const { PORT = 3000 } = process.env;
 
 const app = express();
 
