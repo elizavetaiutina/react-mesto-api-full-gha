@@ -78,7 +78,7 @@ class Api {
 const api = new Api({
   baseUrl: "http://api.lizaiutina.nomoredomains.monster",
   headers: {
-    authorization: token,
+    authorization: `Bearer ${localStorage.getItem("token")}`,
     "Content-Type": "application/json",
   },
 });
