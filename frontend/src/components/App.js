@@ -188,14 +188,15 @@ function App() {
   }, [loggedIn]);
 
   const tokenCheck = () => {
-    const jwt = localStorage.getItem("jwt");
+    const jwt = localStorage.getItem("token");
 
     if (jwt) {
       auth
         .getContent(jwt)
         .then((res) => {
+          console.log("res", res);
           setLoggedIn(true);
-          setUserData(res.data.email);
+          setUserData(res.email);
           navigate("/", { replace: true });
         })
         .catch((err) => {
@@ -236,7 +237,7 @@ function App() {
         }
         if (data) {
           setLoggedIn(true);
-          localStorage.setItem("jwt", data.token);
+          localStorage.setItem("token", data.token);
           return data;
         }
       })
@@ -249,7 +250,7 @@ function App() {
   };
 
   const onSignOut = () => {
-    localStorage.removeItem("jwt");
+    localStorage.removeItem("token");
     setLoggedIn(false);
     navigate("/signin", { replace: true });
   };
