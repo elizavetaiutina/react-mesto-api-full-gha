@@ -44,7 +44,7 @@ class Auth {
 }
 
 const auth = new Auth({
-  baseUrl: "https://api.lizaiutina.nomoredomains.monster",
+  baseUrl: "https://lizaiutina.nomoredomains.monster",
 });
 
 export default auth;
