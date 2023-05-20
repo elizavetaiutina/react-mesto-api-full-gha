@@ -10,7 +10,7 @@
 
 ## Ссылки на проект
 
-IP-адрес 158.160.28.9
+IP 158.160.28.9
 
 Frontend https://lizaiutina.nomoredomains.monster
 
