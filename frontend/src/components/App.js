@@ -39,7 +39,7 @@ function App() {
   const navigate = useNavigate();
 
   const api = new Api({
-    baseUrl: "https://lizaiutina.nomoredomains.monster",
+    baseUrl: "http://api.lizaiutina.nomoredomains.monster",
     headers: {
       authorization: `Bearer ${localStorage.getItem("token")}`,
       "Content-Type": "application/json",
