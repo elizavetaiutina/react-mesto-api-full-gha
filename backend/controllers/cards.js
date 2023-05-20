@@ -6,6 +6,7 @@ const ErrorForbidden = require('../utils/errors/ErrorForbidden');
 // ВОЗВРАЩАЕТ ВСЕ КАРТОЧКИ
 const getCards = (req, res, next) => {
   Card.find({})
+    .populate(['owner', 'likes'])
     .then((cards) => res.send(cards))
     .catch((err) => next(err));
 };
@@ -56,6 +57,7 @@ const addLikeCard = (req, res, next) => {
     { $addToSet: { likes: req.user._id } },
     { new: true }
   )
+    .populate(['owner', 'likes'])
     .then((card) => {
       if (!card) {
         throw new ErrorNotFound('Запрашиваемая карта не найдена');
@@ -78,6 +80,7 @@ const deleteLikeCard = (req, res, next) => {
     { $pull: { likes: req.user._id } },
     { new: true }
   )
+    .populate(['owner', 'likes'])
     .then((card) => {
       if (!card) {
         throw new ErrorNotFound('Запрашиваемая карта не найдена');

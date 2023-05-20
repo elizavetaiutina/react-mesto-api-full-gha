@@ -28,7 +28,7 @@ const login = (req, res, next) => {
             expiresIn: '7d',
           }
         ); // создадим токен
-        console.log(token);
+        console.log('token, user', token, user);
         return res.status(200).send({ token }); // вернём токен
       });
     })
@@ -38,7 +38,7 @@ const login = (req, res, next) => {
 // ВОЗВРАЩАЕТ ВСЕХ ПОЛЬЗОВАТЕЛЕЙ
 const getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.send(users))
+    .then((users) => res.send({ data: users }))
     .catch((err) => next(err));
 };
 
@@ -62,12 +62,12 @@ const getUser = (req, res, next) => {
 
 // ВОЗВРАЩАЕТ ИНФОРМАЦИЮ О ТЕКУЩЕМ ПОЛЬЗОВАТЕЛЕ
 const getInfoUser = (req, res, next) => {
-  console.log(req);
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
         throw new ErrorNotFound('Запрашиваемый пользователь не найден');
       }
+      console.log(req);
       return res.status(200).send(user);
     })
     .catch((err) => {

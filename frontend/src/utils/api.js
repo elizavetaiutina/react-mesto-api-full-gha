@@ -5,7 +5,6 @@ class Api {
   }
 
   _checkResponse(result) {
-    console.log("result", result);
     if (result.ok) {
       return result.json();
     }
@@ -66,7 +65,7 @@ class Api {
         headers: this._headers,
       });
     } else {
-      return this._request(`${this._url}/cards/${id}//likes`, {
+      return this._request(`${this._url}/cards/${id}/likes`, {
         method: "PUT",
         headers: this._headers,
       });
@@ -74,12 +73,4 @@ class Api {
   }
 }
 
-const api = new Api({
-  baseUrl: "http://localhost:3000",
-  headers: {
-    authorization: `Bearer ${localStorage.getItem("token")}`,
-    "Content-Type": "application/json",
-  },
-});
-
-export default api;
+export default Api;

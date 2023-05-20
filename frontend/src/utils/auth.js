@@ -44,7 +44,7 @@ class Auth {
 }
 
 const auth = new Auth({
-  baseUrl: "http://localhost:3000",
+  baseUrl: "https://api.lizaiutina.nomoredomains.monster",
 });
 
 export default auth;

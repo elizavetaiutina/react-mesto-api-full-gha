@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import api from "../utils/api.js";
+import Api from "../utils/api.js";
 import auth from "../utils/auth.js";
 
 import CurrentUserContext from "../contexts/CurrentUserContext.js";
@@ -22,33 +22,103 @@ function App() {
   const [arrayCards, setArrayCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [userData, setUserData] = useState("");
+  const [isFailedRequestOfRegister, setIsFailedRequestOfRegister] = useState(false);
 
-    api
-      .changeLikeCardStatus(card._id, isLiked)
-      .then((selectedCard) => {
-        setArrayCards((state) => state.map((c) => (c._id === card._id ? selectedCard : c)));
-      })
-      .catch((err) => {
-        console.log(`Ошибка: ${err}.`);
-      });
-  }
-  function handleCardDelete(card) {
-    setIsLoading(true);
-    api
-      .deleteCard(card._id)
-      .then(() => {
-        setArrayCards((state) => state.filter((c) => (c._id === card._id ? "" : c)));
-        closeAllPopups();
-      })
-      .catch((err) => {
-        console.log(`Ошибка: ${err}.`);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
+  // Открытие закрытие попапов
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isCardPopupOpen, setIsCardPopupOpen] = useState(false);
+  const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = useState(false);
+  const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = useState(false);
+
+  const [selectedCard, setSelectedCard] = useState({ name: "", link: "" });
+
+  const navigate = useNavigate();
+
+  const api = new Api({
+    baseUrl: "https://api.lizaiutina.nomoredomains.monster",
+    headers: {
+      authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  useEffect(() => {
+    if (loggedIn) {
+      tokenCheck();
+    }
+  }, [loggedIn]);
+
+  const tokenCheck = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      auth
+        .getContent(token)
+        .then((res) => {
+          setLoggedIn(true);
+          setUserData(res.email);
+          navigate("/", { replace: true });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  useEffect(() => {
+    loggedIn &&
+      Promise.all([api.getUserInfo(), api.getInitialCards()])
+        .then(([user, array]) => {
+          setCurrentUser(user);
+          setArrayCards(array.reverse());
+        })
+        .catch((err) => {
+          console.log(`Ошибка: ${err}.`);
+        });
+  }, [loggedIn]);
+
+  const handleEditAvatarClick = () => {
+    setIsEditAvatarPopupOpen(true);
+  };
+  const handleEditProfileClick = () => {
+    setIsEditProfilePopupOpen(true);
+  };
+  const handleAddPlaceClick = () => {
+    setIsAddPlacePopupOpen(true);
+  };
+  const handleCardClick = (card) => {
+    setIsCardPopupOpen(true);
+    setSelectedCard(card);
+  };
+  const handleDeleteClick = (card) => {
+    setIsDeleteCardPopupOpen(true);
+    setSelectedCard(card);
+  };
+  const handleInfoTooltip = () => {
+    setIsInfoTooltipPopupOpen(true);
+  };
+  const closeAllPopups = () => {
+    setIsEditAvatarPopupOpen(false);
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsCardPopupOpen(false);
+    setIsDeleteCardPopupOpen(false);
+    setSelectedCard({ name: "", link: "" });
+    setIsInfoTooltipPopupOpen(false);
+  };
+
+  // Обработчик Escape
+  const isOpenPopup =
+    isEditProfilePopupOpen ||
+    isAddPlacePopupOpen ||
+    isEditAvatarPopupOpen ||
+    isCardPopupOpen ||
+    isDeleteCardPopupOpen ||
+    isInfoTooltipPopupOpen;
+
   function handleUpdateUser(data) {
     setIsLoading(true);
     api
@@ -95,55 +165,33 @@ function App() {
         setIsLoading(false);
       });
   }
+  function handleCardLike(card) {
+    const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
-  // Открытие закрытие попапов
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [isCardPopupOpen, setIsCardPopupOpen] = useState(false);
-  const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = useState(false);
-  const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = useState(false);
-
-  const [selectedCard, setSelectedCard] = useState({ name: "", link: "" });
-
-  const handleEditAvatarClick = () => {
-    setIsEditAvatarPopupOpen(true);
-  };
-  const handleEditProfileClick = () => {
-    setIsEditProfilePopupOpen(true);
-  };
-  const handleAddPlaceClick = () => {
-    setIsAddPlacePopupOpen(true);
-  };
-  const handleCardClick = (card) => {
-    setIsCardPopupOpen(true);
-    setSelectedCard(card);
-  };
-  const handleDeleteClick = (card) => {
-    setIsDeleteCardPopupOpen(true);
-    setSelectedCard(card);
-  };
-  const handleInfoTooltip = () => {
-    setIsInfoTooltipPopupOpen(true);
-  };
-  const closeAllPopups = () => {
-    setIsEditAvatarPopupOpen(false);
-    setIsEditProfilePopupOpen(false);
-    setIsAddPlacePopupOpen(false);
-    setIsCardPopupOpen(false);
-    setIsDeleteCardPopupOpen(false);
-    setSelectedCard({ name: "", link: "" });
-    setIsInfoTooltipPopupOpen(false);
-  };
-
-  // Обработчик Escape
-  const isOpenPopup =
-    isEditProfilePopupOpen ||
-    isAddPlacePopupOpen ||
-    isEditAvatarPopupOpen ||
-    isCardPopupOpen ||
-    isDeleteCardPopupOpen ||
-    isInfoTooltipPopupOpen;
+    api
+      .changeLikeCardStatus(card._id, isLiked)
+      .then((selectedCard) => {
+        setArrayCards((state) => state.map((c) => (c._id === card._id ? selectedCard : c)));
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}.`);
+      });
+  }
+  function handleCardDelete(card) {
+    setIsLoading(true);
+    api
+      .deleteCard(card._id)
+      .then(() => {
+        setArrayCards((state) => state.filter((c) => (c._id === card._id ? "" : c)));
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}.`);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
 
   useEffect(() => {
     function closeByEscape(evt) {
@@ -167,33 +215,6 @@ function App() {
       };
     }
   }, [isOpenPopup]);
-
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [userData, setUserData] = useState("");
-  const [isFailedRequestOfRegister, setIsFailedRequestOfRegister] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    tokenCheck();
-  }, [loggedIn]);
-
-  const tokenCheck = () => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      auth
-        .getContent(token)
-        .then((res) => {
-          console.log("res", res);
-          setLoggedIn(true);
-          setUserData(res.email);
-          navigate("/", { replace: true });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
 
   const onRegister = (password, email) => {
     auth
@@ -244,18 +265,6 @@ function App() {
     setLoggedIn(false);
     navigate("/signin", { replace: true });
   };
-
-  useEffect(() => {
-    loggedIn &&
-      Promise.all([api.getUserInfo(), api.getInitialCards()])
-        .then(([user, array]) => {
-          setCurrentUser(user);
-          setArrayCards(array);
-        })
-        .catch((err) => {
-          console.log(`Ошибка: ${err}.`);
-        });
-  }, [loggedIn]);
 
   return (
     <div className="App">
